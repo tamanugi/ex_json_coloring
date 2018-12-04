@@ -22,15 +22,33 @@ defmodule ExJsonColoring.Lexir do
     iex>ExJsonColoring.Lexir.element "123", []
     {"", [%ExJsonColoring.Token{token: :number, value: "123"}]}
 
+    iex>ExJsonColoring.Lexir.element ~s("test"), []
+    {"", [%ExJsonColoring.Token{token: :string, value: "test"}]}
+
+    iex>ExJsonColoring.Lexir.element ~s("123456"), []
+    {"", [%ExJsonColoring.Token{token: :string, value: "123456"}]}
+
+
   """
   def element(arg, acc) do
     skip_ws(arg)
     |> value(acc)
   end
 
-  # 
+  # string
   def value("", acc), do: {"", acc}
   def value(ws, acc) when ws in '\s\n\t\r', do: {"", acc}
+
+  def value("\"" <> rest, acc) do
+    {rest_, str_val} = string(rest, "")
+    acc = acc ++ [%Token{token: :string, value: str_val}]
+    value(rest_, acc)
+  end
+
+  def string("\"" <> rest, acc), do: {rest, acc}
+  def string(<<char>> <> rest, acc) do
+    string(rest, acc <> <<char>>)
+  end
 
   # number
   def value(<<char>> <> rest, acc) when char in '123456789'  do
