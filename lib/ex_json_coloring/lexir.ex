@@ -89,6 +89,24 @@ defmodule ExJsonColoring.Lexir do
         %ExJsonColoring.Token{token: :square_bracket, value: "]"},
       ]
     }
+
+    iex>ExJsonColoring.Lexir.element ~s([1, {"key": "value"} , false]), []
+    {
+      "",
+      [
+        %ExJsonColoring.Token{token: :square_bracket, value: "["},
+        %ExJsonColoring.Token{token: :number, value: "1"},
+        %ExJsonColoring.Token{token: :comma, value: ","},
+        %ExJsonColoring.Token{token: :brace, value: "{"},
+        %ExJsonColoring.Token{token: :key_string, value: "key"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :string, value: "value"},
+        %ExJsonColoring.Token{token: :brace, value: "}"},
+        %ExJsonColoring.Token{token: :comma, value: ","},
+        %ExJsonColoring.Token{token: :boolean, value: "false"},
+        %ExJsonColoring.Token{token: :square_bracket, value: "]"},
+      ]
+    }
   """
   def element(arg, acc) do
     skip_ws(arg)
