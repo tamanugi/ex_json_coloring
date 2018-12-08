@@ -40,6 +40,41 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
 
+    iex>ExJsonColoring.Lexir.element ~s({"key": "value", "key2": "value2"}), []
+    {
+      "",
+      [
+        %ExJsonColoring.Token{token: :brace, value: "{"},
+        %ExJsonColoring.Token{token: :key_string, value: "key"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :string, value: "value"},
+        %ExJsonColoring.Token{token: :comma, value: ","},
+        %ExJsonColoring.Token{token: :key_string, value: "key2"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :string, value: "value2"},
+        %ExJsonColoring.Token{token: :brace, value: "}"},
+      ]
+    }
+
+    iex>ExJsonColoring.Lexir.element ~s({"key": "value", "key2": {"nestk1": "nestv1"}}), []
+    {
+      "",
+      [
+        %ExJsonColoring.Token{token: :brace, value: "{"},
+        %ExJsonColoring.Token{token: :key_string, value: "key"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :string, value: "value"},
+        %ExJsonColoring.Token{token: :comma, value: ","},
+        %ExJsonColoring.Token{token: :key_string, value: "key2"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :brace, value: "{"},
+        %ExJsonColoring.Token{token: :key_string, value: "nestk1"},
+        %ExJsonColoring.Token{token: :colon, value: ":"},
+        %ExJsonColoring.Token{token: :string, value: "nestv1"},
+        %ExJsonColoring.Token{token: :brace, value: "}"},
+        %ExJsonColoring.Token{token: :brace, value: "}"},
+      ]
+    }
   """
   def element(arg, acc) do
     skip_ws(arg)
@@ -63,6 +98,13 @@ defmodule ExJsonColoring.Lexir do
   def value("}" <> rest, acc) do
     acc = acc ++ [%Token{token: :brace, value: "}"}]
     value(rest, acc)
+  end
+
+  def value("," <> rest, acc) do
+    acc = acc ++ [%Token{token: :comma, value: ","}]
+    {rest_, str_val} = string_start(rest |> skip_ws)
+    acc = acc ++ [%Token{token: :key_string, value: str_val}]
+    value(rest_, acc)
   end
 
   # string
