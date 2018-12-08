@@ -6,18 +6,6 @@ defmodule ExJsonColoring do
   alias ExJsonColoring.Token
   alias ExJsonColoring.Lexir
 
-  @tokens [
-    :square_bracket,
-    :brace,
-    :colon,
-    :comma,
-
-    :key,
-    :string,
-    :number,
-    :boolean
-  ]
-
   @doc """
   
   ## Examples
@@ -47,7 +35,6 @@ defmodule ExJsonColoring do
       "{" ->
         {[color(:brace), "{", "\n", indent(indent_lv + 1)], indent_lv + 1}
       "}" ->
-        IO.puts  "indent_lv: #{indent_lv}"
         {["\n", indent(indent_lv - 1), color(:brace), "}"], indent_lv - 1}
     end
   end
