@@ -69,8 +69,10 @@ defmodule ExJsonColoring do
     for _ <- 1..(indent_lv * 2), do: " "
   end
 
-  def color(_) do
-    :red
-  end
+  defp color(:string), do: :green 
+  defp color(:key_string), do: :fuchsia
+  defp color(:boolean), do: :blue
+  defp color(:number), do: :lightyellow
+  defp color(:null), do: :lightgray
+  defp color(_), do: Bunt.ANSI.reset
 end
-
