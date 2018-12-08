@@ -2,8 +2,9 @@ defmodule ExJsonColoring.Lexir do
   alias ExJsonColoring.Token
 
   def lexir(json) do
-    json
+    {_, tokens} = json
     |> element([])
+    tokens
   end
 
   @doc """
