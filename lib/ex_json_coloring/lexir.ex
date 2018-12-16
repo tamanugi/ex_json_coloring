@@ -116,10 +116,10 @@ defmodule ExJsonColoring.Lexir do
 
   def value(rest, acc), do: value(rest, acc, [])
 
-  # en
+  # end
   def value("", acc, state_stack), do: {"", acc}
 
-  # array 
+  # array
   def value("[" <> rest, acc, state_stack) do
     acc = acc ++ [%Token{type: :square_bracket, value: "["}]
     value(rest, acc, [:array | state_stack])
