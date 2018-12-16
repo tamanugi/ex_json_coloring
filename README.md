@@ -1,6 +1,6 @@
 # ExJsonColoring
 
-**TODO: Add description**
+Syntax highlighting and Formating for JSON in Elixir
 
 ## Installation
 

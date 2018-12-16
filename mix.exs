@@ -6,6 +6,12 @@ defmodule ExJsonColoring.MixProject do
       app: :ex_json_coloring,
       version: "0.1.0",
       elixir: "~> 1.6",
+      description: "Syntax highlighting and Formating for JSON",
+      package: [
+        maintainers: ["tamanugi"],
+        licenses: ["MIT"],
+        links: %{"GitHub" => "https://github.com/tamanugi/ex_json_coloring"}
+      ],
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
