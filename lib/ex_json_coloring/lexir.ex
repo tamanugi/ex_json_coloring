@@ -12,32 +12,32 @@ defmodule ExJsonColoring.Lexir do
   ## Examples
 
     iex>ExJsonColoring.Lexir.element "true", []
-    {"", [%ExJsonColoring.Token{token: :boolean, value: "true"}]}
+    {"", [%ExJsonColoring.Token{type: :boolean, value: "true"}]}
 
     iex>ExJsonColoring.Lexir.element " false", []
-    {"", [%ExJsonColoring.Token{token: :boolean, value: "false"}]}
+    {"", [%ExJsonColoring.Token{type: :boolean, value: "false"}]}
 
     iex>ExJsonColoring.Lexir.element "null", []
-    {"", [%ExJsonColoring.Token{token: :null, value: "null"}]}
+    {"", [%ExJsonColoring.Token{type: :null, value: "null"}]}
 
     iex>ExJsonColoring.Lexir.element "123", []
-    {"", [%ExJsonColoring.Token{token: :number, value: "123"}]}
+    {"", [%ExJsonColoring.Token{type: :number, value: "123"}]}
 
     iex>ExJsonColoring.Lexir.element ~s("test"), []
-    {"", [%ExJsonColoring.Token{token: :string, value: "test"}]}
+    {"", [%ExJsonColoring.Token{type: :string, value: "test"}]}
 
     iex>ExJsonColoring.Lexir.element ~s("123456"), []
-    {"", [%ExJsonColoring.Token{token: :string, value: "123456"}]}
+    {"", [%ExJsonColoring.Token{type: :string, value: "123456"}]}
 
     iex>ExJsonColoring.Lexir.element ~s({"key": "value"}), []
     {
       "",
       [
-        %ExJsonColoring.Token{token: :brace, value: "{"},
-        %ExJsonColoring.Token{token: :key_string, value: "key"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "value"},
-        %ExJsonColoring.Token{token: :brace, value: "}"},
+        %ExJsonColoring.Token{type: :brace, value: "{"},
+        %ExJsonColoring.Token{type: :key_string, value: "key"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "value"},
+        %ExJsonColoring.Token{type: :brace, value: "}"},
       ]
     }
 
@@ -45,15 +45,15 @@ defmodule ExJsonColoring.Lexir do
     {
       "",
       [
-        %ExJsonColoring.Token{token: :brace, value: "{"},
-        %ExJsonColoring.Token{token: :key_string, value: "key"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "value"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :key_string, value: "key2"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "value2"},
-        %ExJsonColoring.Token{token: :brace, value: "}"},
+        %ExJsonColoring.Token{type: :brace, value: "{"},
+        %ExJsonColoring.Token{type: :key_string, value: "key"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "value"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :key_string, value: "key2"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "value2"},
+        %ExJsonColoring.Token{type: :brace, value: "}"},
       ]
     }
 
@@ -61,19 +61,19 @@ defmodule ExJsonColoring.Lexir do
     {
       "",
       [
-        %ExJsonColoring.Token{token: :brace, value: "{"},
-        %ExJsonColoring.Token{token: :key_string, value: "key"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "value"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :key_string, value: "key2"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :brace, value: "{"},
-        %ExJsonColoring.Token{token: :key_string, value: "nestk1"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "nestv1"},
-        %ExJsonColoring.Token{token: :brace, value: "}"},
-        %ExJsonColoring.Token{token: :brace, value: "}"},
+        %ExJsonColoring.Token{type: :brace, value: "{"},
+        %ExJsonColoring.Token{type: :key_string, value: "key"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "value"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :key_string, value: "key2"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :brace, value: "{"},
+        %ExJsonColoring.Token{type: :key_string, value: "nestk1"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "nestv1"},
+        %ExJsonColoring.Token{type: :brace, value: "}"},
+        %ExJsonColoring.Token{type: :brace, value: "}"},
       ]
     }
 
@@ -81,13 +81,13 @@ defmodule ExJsonColoring.Lexir do
     {
       "",
       [
-        %ExJsonColoring.Token{token: :square_bracket, value: "["},
-        %ExJsonColoring.Token{token: :number, value: "1"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :number, value: "2"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :number, value: "3"},
-        %ExJsonColoring.Token{token: :square_bracket, value: "]"},
+        %ExJsonColoring.Token{type: :square_bracket, value: "["},
+        %ExJsonColoring.Token{type: :number, value: "1"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :number, value: "2"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :number, value: "3"},
+        %ExJsonColoring.Token{type: :square_bracket, value: "]"},
       ]
     }
 
@@ -95,17 +95,17 @@ defmodule ExJsonColoring.Lexir do
     {
       "",
       [
-        %ExJsonColoring.Token{token: :square_bracket, value: "["},
-        %ExJsonColoring.Token{token: :number, value: "1"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :brace, value: "{"},
-        %ExJsonColoring.Token{token: :key_string, value: "key"},
-        %ExJsonColoring.Token{token: :colon, value: ":"},
-        %ExJsonColoring.Token{token: :string, value: "value"},
-        %ExJsonColoring.Token{token: :brace, value: "}"},
-        %ExJsonColoring.Token{token: :comma, value: ","},
-        %ExJsonColoring.Token{token: :boolean, value: "false"},
-        %ExJsonColoring.Token{token: :square_bracket, value: "]"},
+        %ExJsonColoring.Token{type: :square_bracket, value: "["},
+        %ExJsonColoring.Token{type: :number, value: "1"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :brace, value: "{"},
+        %ExJsonColoring.Token{type: :key_string, value: "key"},
+        %ExJsonColoring.Token{type: :colon, value: ":"},
+        %ExJsonColoring.Token{type: :string, value: "value"},
+        %ExJsonColoring.Token{type: :brace, value: "}"},
+        %ExJsonColoring.Token{type: :comma, value: ","},
+        %ExJsonColoring.Token{type: :boolean, value: "false"},
+        %ExJsonColoring.Token{type: :square_bracket, value: "]"},
       ]
     }
   """
@@ -121,41 +121,41 @@ defmodule ExJsonColoring.Lexir do
 
   # array 
   def value("[" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :square_bracket, value: "["}]
+    acc = acc ++ [%Token{type: :square_bracket, value: "["}]
     value(rest, acc, [:array | state_stack])
   end
 
   def value("]" <> rest, acc, [:array | tail ] = state_stack) do
-    acc = acc ++ [%Token{token: :square_bracket, value: "]"}]
+    acc = acc ++ [%Token{type: :square_bracket, value: "]"}]
     value(rest, acc, tail)
   end
 
   # object
   def value("{" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :brace, value: "{"}]
+    acc = acc ++ [%Token{type: :brace, value: "{"}]
     {rest_, str_val} = string_start(rest)
-    acc = acc ++ [%Token{token: :key_string, value: str_val}]
+    acc = acc ++ [%Token{type: :key_string, value: str_val}]
 
     value(rest_, acc, [:object | state_stack])
   end
 
   def value(":" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :colon, value: ":"}]
+    acc = acc ++ [%Token{type: :colon, value: ":"}]
     value(rest, acc, state_stack)
   end
 
   def value("}" <> rest, acc, [:object | tail] = state_stack) do
-    acc = acc ++ [%Token{token: :brace, value: "}"}]
+    acc = acc ++ [%Token{type: :brace, value: "}"}]
     value(rest, acc, tail)
   end
 
   def value("," <> rest, acc, [cur | _] = state_stack) do
-    acc = acc ++ [%Token{token: :comma, value: ","}]
+    acc = acc ++ [%Token{type: :comma, value: ","}]
 
     {rest, acc} = case cur do
       :object ->
         {rest_, str_val} = string_start(rest |> skip_ws)
-        {rest_, acc ++ [%Token{token: :key_string, value: str_val}]}
+        {rest_, acc ++ [%Token{type: :key_string, value: str_val}]}
       _ -> 
         {rest, acc}
     end
@@ -168,7 +168,7 @@ defmodule ExJsonColoring.Lexir do
 
   def value("\"" <> _ = string, acc, state_stack) do
     {rest, str_val} = string_start(string)
-    acc = acc ++ [%Token{token: :string, value: str_val}]
+    acc = acc ++ [%Token{type: :string, value: str_val}]
     value(rest, acc, state_stack)
   end
 
@@ -184,7 +184,7 @@ defmodule ExJsonColoring.Lexir do
   # number
   def value(<<char>> <> rest, acc, state_stack) when char in '123456789'  do
     {rest_, number_val} = number(rest, [char])
-    acc = acc ++ [%Token{token: :number, value: number_val |> List.to_string}]
+    acc = acc ++ [%Token{type: :number, value: number_val |> List.to_string}]
     value(rest_, acc, state_stack)
   end
 
@@ -196,19 +196,19 @@ defmodule ExJsonColoring.Lexir do
   # boolean
 
   def value("true" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :boolean, value: "true"}]
+    acc = acc ++ [%Token{type: :boolean, value: "true"}]
     value(rest, acc, state_stack)
   end
 
   def value("false" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :boolean, value: "false"}]
+    acc = acc ++ [%Token{type: :boolean, value: "false"}]
     value(rest, acc, state_stack)
   end
 
   # null
 
   def value("null" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{token: :null, value: "null"}]
+    acc = acc ++ [%Token{type: :null, value: "null"}]
     value(rest, acc, state_stack)
   end
 

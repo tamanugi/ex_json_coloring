@@ -25,7 +25,7 @@ defmodule ExJsonColoring do
   end
 
   def process_format([], 0, acc), do: acc
-  def process_format([%Token{token: type, value: value} | tail] , indent_lv, acc) do
+  def process_format([%Token{type: type, value: value} | tail] , indent_lv, acc) do
     {formated, indent_lv} = format(type, value, indent_lv)
     process_format(tail, indent_lv, acc ++ [formated])
   end
