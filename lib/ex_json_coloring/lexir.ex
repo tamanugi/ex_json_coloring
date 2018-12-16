@@ -130,13 +130,15 @@ defmodule ExJsonColoring.Lexir do
     value(rest, acc, tail)
   end
 
+  def value("," <> rest, acc, [:array | _] = state_stack) do
+    acc = acc ++ [%Token{type: :comma, value: ","}]
+    value(rest, acc, state_stack)
+  end
+
   # object
   def value("{" <> rest, acc, state_stack) do
     acc = acc ++ [%Token{type: :brace, value: "{"}]
-    {rest_, str_val} = string_start(rest)
-    acc = acc ++ [%Token{type: :key_string, value: str_val}]
-
-    value(rest_, acc, [:object | state_stack])
+    key_string(rest, acc, [:object | state_stack])
   end
 
   def value(":" <> rest, acc, state_stack) do
@@ -149,16 +151,14 @@ defmodule ExJsonColoring.Lexir do
     value(rest, acc, tail)
   end
 
-  def value("," <> rest, acc, [cur | _] = state_stack) do
+  def value("," <> rest, acc, [:object | _] = state_stack) do
     acc = acc ++ [%Token{type: :comma, value: ","}]
-
-    {rest, acc} = case cur do
-      :object ->
-        {rest_, str_val} = string_start(rest |> skip_ws)
-        {rest_, acc ++ [%Token{type: :key_string, value: str_val}]}
-      _ -> 
-        {rest, acc}
-    end
+    key_string(rest, acc, state_stack)
+  end
+  
+  def key_string(rest, acc, state_stack) do
+    {rest, str_val} = string_start(rest |> skip_ws)
+    acc = acc ++ [%Token{type: :key_string, value: str_val}]
 
     value(rest, acc, state_stack)
   end
