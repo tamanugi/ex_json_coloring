@@ -109,54 +109,54 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
   """
-  def element(arg, acc) do
+  defp element(arg, acc) do
     skip_ws(arg)
     |> value(acc, [])
   end
 
-  def value(rest, acc), do: value(rest, acc, [])
+  defp value(rest, acc), do: value(rest, acc, [])
 
   # end
-  def value("", acc, _), do: {"", acc |> Enum.reverse}
+  defp value("", acc, _), do: {"", acc |> Enum.reverse}
 
   # array
-  def value("[" <> rest, acc, state_stack) do
+  defp value("[" <> rest, acc, state_stack) do
     token = %Token{type: :square_bracket, value: "["}
     value(rest, [token | acc], [:array | state_stack])
   end
 
-  def value("]" <> rest, acc, [:array | tail ]) do
+  defp value("]" <> rest, acc, [:array | tail ]) do
     token = %Token{type: :square_bracket, value: "]"}
     value(rest, [token | acc], tail)
   end
 
-  def value("," <> rest, acc, [:array | _] = state_stack) do
+  defp value("," <> rest, acc, [:array | _] = state_stack) do
     token = %Token{type: :comma, value: ","}
     value(rest, [token | acc], state_stack)
   end
 
   # object
-  def value("{" <> rest, acc, state_stack) do
+  defp value("{" <> rest, acc, state_stack) do
     token = %Token{type: :brace, value: "{"}
     key_string(rest, [token | acc], [:object | state_stack])
   end
 
-  def value(":" <> rest, acc, state_stack) do
+  defp value(":" <> rest, acc, state_stack) do
     token = %Token{type: :colon, value: ":"}
     value(rest, [token | acc], state_stack)
   end
 
-  def value("}" <> rest, acc, [:object | tail]) do
+  defp value("}" <> rest, acc, [:object | tail]) do
     token = %Token{type: :brace, value: "}"}
     value(rest, [token | acc], tail)
   end
 
-  def value("," <> rest, acc, [:object | _] = state_stack) do
+  defp value("," <> rest, acc, [:object | _] = state_stack) do
     token = %Token{type: :comma, value: ","}
     key_string(rest, [token | acc], state_stack)
   end
   
-  def key_string(rest, acc, state_stack) do
+  defp key_string(rest, acc, state_stack) do
     {rest, str_val} = string_start(rest |> skip_ws)
     token = %Token{type: :key_string, value: str_val}
 
@@ -164,65 +164,65 @@ defmodule ExJsonColoring.Lexir do
   end
 
   # string
-  def value(ws, acc, _) when ws in '\s\n\t\r', do: {"", acc}
+  defp value(ws, acc, _) when ws in '\s\n\t\r', do: {"", acc}
 
-  def value("\"" <> _ = string, acc, state_stack) do
+  defp value("\"" <> _ = string, acc, state_stack) do
     {rest, str_val} = string_start(string)
     token = %Token{type: :string, value: str_val}
     value(rest, [token | acc], state_stack)
   end
 
-  def string_start("\"" <> rest) do
+  defp string_start("\"" <> rest) do
     string(rest, "")
   end
 
-  def string("\"" <> rest, acc), do: {rest, acc}
-  def string(<<char>> <> rest, acc) do
+  defp string("\"" <> rest, acc), do: {rest, acc}
+  defp string(<<char>> <> rest, acc) do
     string(rest, acc <> <<char>>)
   end
 
   # number
-  def value(<<char>> <> rest, acc, state_stack) when char in '123456789'  do
+  defp value(<<char>> <> rest, acc, state_stack) when char in '123456789'  do
     {rest_, number_val} = number(rest, [char])
     token = %Token{type: :number, value: number_val |> List.to_string}
     value(rest_, [token | acc], state_stack)
   end
 
-  def number(<<char>> <> rest, acc) when char in '0123456789' do
+  defp number(<<char>> <> rest, acc) when char in '0123456789' do
     number(rest, acc ++ [char])
   end
-  def number(rest, acc), do: {rest, acc}
+  defp number(rest, acc), do: {rest, acc}
 
   # boolean
 
-  def value("true" <> rest, acc, state_stack) do
+  defp value("true" <> rest, acc, state_stack) do
     token = %Token{type: :boolean, value: "true"}
     value(rest, [token | acc], state_stack)
   end
 
-  def value("false" <> rest, acc, state_stack) do
+  defp value("false" <> rest, acc, state_stack) do
     token = %Token{type: :boolean, value: "false"}
     value(rest, [token | acc], state_stack)
   end
 
   # null
 
-  def value("null" <> rest, acc, state_stack) do
+  defp value("null" <> rest, acc, state_stack) do
     token = %Token{type: :null, value: "null"}
     value(rest, [token | acc], state_stack)
   end
 
   # ws
 
-  def value(<<char>> <> rest, acc, state_stack) when char in '\s\n\t\r' do
+  defp value(<<char>> <> rest, acc, state_stack) when char in '\s\n\t\r' do
     value(rest, acc, state_stack)
   end
 
-  def skip_ws(<<char>> <> rest) when char in  '\s\n\t\r' do
+  defp skip_ws(<<char>> <> rest) when char in  '\s\n\t\r' do
     skip_ws(rest)
   end
 
-  def skip_ws(string) do
+  defp skip_ws(string) do
     string
   end
 

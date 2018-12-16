@@ -24,13 +24,13 @@ defmodule ExJsonColoring do
     |> IO.puts
   end
 
-  def process_format([], 0, acc), do: acc
-  def process_format([%Token{type: type, value: value} | tail] , indent_lv, acc) do
+  defp process_format([], 0, acc), do: acc
+  defp process_format([%Token{type: type, value: value} | tail] , indent_lv, acc) do
     {formated, indent_lv} = format(type, value, indent_lv)
     process_format(tail, indent_lv, acc ++ [formated])
   end
 
-  def format(:brace, value, indent_lv) do
+  defp format(:brace, value, indent_lv) do
     case value do
       "{" ->
         {[color(:brace), "{", "\n", indent(indent_lv + 1)], indent_lv + 1}
@@ -39,7 +39,7 @@ defmodule ExJsonColoring do
     end
   end
 
-  def format(:square_bracket, value, indent_lv) do
+  defp format(:square_bracket, value, indent_lv) do
     case value do
       "[" ->
         {[color(:square_bracket), "[", "\n", indent(indent_lv + 1)], indent_lv + 1}
@@ -48,24 +48,24 @@ defmodule ExJsonColoring do
     end
   end  
 
-  def format(:comma, ",", indent_lv) do
+  defp format(:comma, ",", indent_lv) do
     {[",", "\n", indent(indent_lv)], indent_lv}
   end
 
-  def format(:colon, ":", indent_lv) do
+  defp format(:colon, ":", indent_lv) do
     {[":", " "], indent_lv}
   end
 
-  def format(type, value, indent_lv) when type in [:string, :key_string] do
+  defp format(type, value, indent_lv) when type in [:string, :key_string] do
     {[color(type), "\"#{value}\""], indent_lv}
   end
 
-  def format(type, value, indent_lv) do
+  defp format(type, value, indent_lv) do
     {[color(type), value], indent_lv}
   end
 
-  def indent(0), do: ""
-  def indent(indent_lv) do
+  defp indent(0), do: ""
+  defp indent(indent_lv) do
     for _ <- 1..(indent_lv * 2), do: " "
   end
 
