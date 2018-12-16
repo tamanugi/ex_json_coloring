@@ -117,7 +117,7 @@ defmodule ExJsonColoring.Lexir do
   def value(rest, acc), do: value(rest, acc, [])
 
   # end
-  def value("", acc, state_stack), do: {"", acc |> Enum.reverse}
+  def value("", acc, _), do: {"", acc |> Enum.reverse}
 
   # array
   def value("[" <> rest, acc, state_stack) do
@@ -125,7 +125,7 @@ defmodule ExJsonColoring.Lexir do
     value(rest, [token | acc], [:array | state_stack])
   end
 
-  def value("]" <> rest, acc, [:array | tail ] = state_stack) do
+  def value("]" <> rest, acc, [:array | tail ]) do
     token = %Token{type: :square_bracket, value: "]"}
     value(rest, [token | acc], tail)
   end
@@ -146,7 +146,7 @@ defmodule ExJsonColoring.Lexir do
     value(rest, [token | acc], state_stack)
   end
 
-  def value("}" <> rest, acc, [:object | tail] = state_stack) do
+  def value("}" <> rest, acc, [:object | tail]) do
     token = %Token{type: :brace, value: "}"}
     value(rest, [token | acc], tail)
   end
@@ -164,7 +164,7 @@ defmodule ExJsonColoring.Lexir do
   end
 
   # string
-  def value(ws, acc, state_stack) when ws in '\s\n\t\r', do: {"", acc}
+  def value(ws, acc, _) when ws in '\s\n\t\r', do: {"", acc}
 
   def value("\"" <> _ = string, acc, state_stack) do
     {rest, str_val} = string_start(string)
