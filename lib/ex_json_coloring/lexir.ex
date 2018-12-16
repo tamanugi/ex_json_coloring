@@ -117,50 +117,50 @@ defmodule ExJsonColoring.Lexir do
   def value(rest, acc), do: value(rest, acc, [])
 
   # end
-  def value("", acc, state_stack), do: {"", acc}
+  def value("", acc, state_stack), do: {"", acc |> Enum.reverse}
 
   # array
   def value("[" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :square_bracket, value: "["}]
-    value(rest, acc, [:array | state_stack])
+    token = %Token{type: :square_bracket, value: "["}
+    value(rest, [token | acc], [:array | state_stack])
   end
 
   def value("]" <> rest, acc, [:array | tail ] = state_stack) do
-    acc = acc ++ [%Token{type: :square_bracket, value: "]"}]
-    value(rest, acc, tail)
+    token = %Token{type: :square_bracket, value: "]"}
+    value(rest, [token | acc], tail)
   end
 
   def value("," <> rest, acc, [:array | _] = state_stack) do
-    acc = acc ++ [%Token{type: :comma, value: ","}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :comma, value: ","}
+    value(rest, [token | acc], state_stack)
   end
 
   # object
   def value("{" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :brace, value: "{"}]
-    key_string(rest, acc, [:object | state_stack])
+    token = %Token{type: :brace, value: "{"}
+    key_string(rest, [token | acc], [:object | state_stack])
   end
 
   def value(":" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :colon, value: ":"}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :colon, value: ":"}
+    value(rest, [token | acc], state_stack)
   end
 
   def value("}" <> rest, acc, [:object | tail] = state_stack) do
-    acc = acc ++ [%Token{type: :brace, value: "}"}]
-    value(rest, acc, tail)
+    token = %Token{type: :brace, value: "}"}
+    value(rest, [token | acc], tail)
   end
 
   def value("," <> rest, acc, [:object | _] = state_stack) do
-    acc = acc ++ [%Token{type: :comma, value: ","}]
-    key_string(rest, acc, state_stack)
+    token = %Token{type: :comma, value: ","}
+    key_string(rest, [token | acc], state_stack)
   end
   
   def key_string(rest, acc, state_stack) do
     {rest, str_val} = string_start(rest |> skip_ws)
-    acc = acc ++ [%Token{type: :key_string, value: str_val}]
+    token = %Token{type: :key_string, value: str_val}
 
-    value(rest, acc, state_stack)
+    value(rest, [token | acc], state_stack)
   end
 
   # string
@@ -168,8 +168,8 @@ defmodule ExJsonColoring.Lexir do
 
   def value("\"" <> _ = string, acc, state_stack) do
     {rest, str_val} = string_start(string)
-    acc = acc ++ [%Token{type: :string, value: str_val}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :string, value: str_val}
+    value(rest, [token | acc], state_stack)
   end
 
   def string_start("\"" <> rest) do
@@ -184,8 +184,8 @@ defmodule ExJsonColoring.Lexir do
   # number
   def value(<<char>> <> rest, acc, state_stack) when char in '123456789'  do
     {rest_, number_val} = number(rest, [char])
-    acc = acc ++ [%Token{type: :number, value: number_val |> List.to_string}]
-    value(rest_, acc, state_stack)
+    token = %Token{type: :number, value: number_val |> List.to_string}
+    value(rest_, [token | acc], state_stack)
   end
 
   def number(<<char>> <> rest, acc) when char in '0123456789' do
@@ -196,20 +196,20 @@ defmodule ExJsonColoring.Lexir do
   # boolean
 
   def value("true" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :boolean, value: "true"}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :boolean, value: "true"}
+    value(rest, [token | acc], state_stack)
   end
 
   def value("false" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :boolean, value: "false"}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :boolean, value: "false"}
+    value(rest, [token | acc], state_stack)
   end
 
   # null
 
   def value("null" <> rest, acc, state_stack) do
-    acc = acc ++ [%Token{type: :null, value: "null"}]
-    value(rest, acc, state_stack)
+    token = %Token{type: :null, value: "null"}
+    value(rest, [token | acc], state_stack)
   end
 
   # ws
@@ -225,4 +225,5 @@ defmodule ExJsonColoring.Lexir do
   def skip_ws(string) do
     string
   end
+
 end
