@@ -6,16 +6,6 @@ defmodule ExJsonColoring do
   alias ExJsonColoring.Token
   alias ExJsonColoring.Lexir
 
-  @doc """
-  
-  ## Examples
-
-    iex>ExJsonColoring.coloring  ~s({"key": "value"})
-    {
-      "key": "value"
-    }
-
-  """
   def coloring(json) do
     Lexir.lexir(json)
     |> process_format(0, [])
