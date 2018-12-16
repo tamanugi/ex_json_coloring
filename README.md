@@ -2,6 +2,17 @@
 
 Syntax highlighting and Formating for JSON in Elixir
 
+![capture](assets/capture.png)
+
+## Usage
+
+```
+iex> ExJsonColoring.coloring ~s({"key": "value"})
+{
+  "key": "value"
+}
+```
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
