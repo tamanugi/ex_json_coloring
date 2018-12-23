@@ -1,7 +1,7 @@
-defmodule ExJsonColoring.Lexir do
+defmodule ExJsonColoring.Parser do
   alias ExJsonColoring.Token
 
-  def lexir(json) do
+  def parse(json) do
     {_, tokens} = json
     |> element([])
     tokens
@@ -11,25 +11,25 @@ defmodule ExJsonColoring.Lexir do
   
   ## Examples
 
-    iex>ExJsonColoring.Lexir.element "true", []
+    iex>ExJsonColoring.Parser.element "true", []
     {"", [%ExJsonColoring.Token{type: :boolean, value: "true"}]}
 
-    iex>ExJsonColoring.Lexir.element " false", []
+    iex>ExJsonColoring.Parser.element " false", []
     {"", [%ExJsonColoring.Token{type: :boolean, value: "false"}]}
 
-    iex>ExJsonColoring.Lexir.element "null", []
+    iex>ExJsonColoring.Parser.element "null", []
     {"", [%ExJsonColoring.Token{type: :null, value: "null"}]}
 
-    iex>ExJsonColoring.Lexir.element "123", []
+    iex>ExJsonColoring.Parser.element "123", []
     {"", [%ExJsonColoring.Token{type: :number, value: "123"}]}
 
-    iex>ExJsonColoring.Lexir.element ~s("test"), []
+    iex>ExJsonColoring.Parser.element ~s("test"), []
     {"", [%ExJsonColoring.Token{type: :string, value: "test"}]}
 
-    iex>ExJsonColoring.Lexir.element ~s("123456"), []
+    iex>ExJsonColoring.Parser.element ~s("123456"), []
     {"", [%ExJsonColoring.Token{type: :string, value: "123456"}]}
 
-    iex>ExJsonColoring.Lexir.element ~s({"key": "value"}), []
+    iex>ExJsonColoring.Parser.element ~s({"key": "value"}), []
     {
       "",
       [
@@ -41,7 +41,7 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
 
-    iex>ExJsonColoring.Lexir.element ~s({"key": "value", "key2": "value2"}), []
+    iex>ExJsonColoring.Parser.element ~s({"key": "value", "key2": "value2"}), []
     {
       "",
       [
@@ -57,7 +57,7 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
 
-    iex>ExJsonColoring.Lexir.element ~s({"key": "value", "key2": {"nestk1": "nestv1"}}), []
+    iex>ExJsonColoring.Parser.element ~s({"key": "value", "key2": {"nestk1": "nestv1"}}), []
     {
       "",
       [
@@ -77,7 +77,7 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
 
-    iex>ExJsonColoring.Lexir.element ~s([1,2,3]), []
+    iex>ExJsonColoring.Parser.element ~s([1,2,3]), []
     {
       "",
       [
@@ -91,7 +91,7 @@ defmodule ExJsonColoring.Lexir do
       ]
     }
 
-    iex>ExJsonColoring.Lexir.element ~s([1, {"key": "value"} , false]), []
+    iex>ExJsonColoring.Parser.element ~s([1, {"key": "value"} , false]), []
     {
       "",
       [

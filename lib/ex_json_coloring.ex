@@ -4,10 +4,10 @@ defmodule ExJsonColoring do
   """
 
   alias ExJsonColoring.Token
-  alias ExJsonColoring.Lexir
+  alias ExJsonColoring.Parser
 
   def coloring(json) do
-    Lexir.lexir(json)
+    Parser.parse(json)
     |> process_format(0, [])
     |> List.flatten
     |> Bunt.ANSI.format
