@@ -39,7 +39,7 @@ defmodule ExJsonColoring do
   end  
 
   defp format(:comma, ",", indent_lv) do
-    {[",", "\n", indent(indent_lv)], indent_lv}
+    {[color(:comma), ",", "\n", indent(indent_lv)], indent_lv}
   end
 
   defp format(:colon, ":", indent_lv) do
