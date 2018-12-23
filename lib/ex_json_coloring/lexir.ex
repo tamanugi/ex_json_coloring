@@ -182,13 +182,13 @@ defmodule ExJsonColoring.Lexir do
   end
 
   # number
-  defp value(<<char>> <> rest, acc, state_stack) when char in '123456789'  do
+  defp value(<<char>> <> rest, acc, state_stack) when char in '-0123456789'  do
     {rest_, number_val} = number(rest, [char])
     token = %Token{type: :number, value: number_val |> List.to_string}
     value(rest_, [token | acc], state_stack)
   end
 
-  defp number(<<char>> <> rest, acc) when char in '0123456789' do
+  defp number(<<char>> <> rest, acc) when char in '0123456789.' do
     number(rest, acc ++ [char])
   end
   defp number(rest, acc), do: {rest, acc}
